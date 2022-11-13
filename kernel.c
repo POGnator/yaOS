@@ -1,4 +1,7 @@
 #include "kernel.h"
+#include "keyboard.h"
+#include "utils.h"
+#include "char.h"
 
 //index for video buffer array
 uint32 vga_index;
@@ -8,6 +11,7 @@ static uint32 next_line_index = 1;
 uint8 g_fore_color = WHITE, g_back_color = BLUE;
 //digit ascii code for printing integers
 int digit_ascii_codes[10] = {0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
+uint32 lastLineLength = 0;
 
 /*
 16 bit video buffer elements(register ax)
@@ -41,6 +45,8 @@ void clear_vga_buffer(uint16 **buffer, uint8 fore_color, uint8 back_color)
   for(i = 0; i < BUFSIZE; i++){
     (*buffer)[i] = vga_entry(NULL, fore_color, back_color);
   }
+  next_line_index = 0;
+  vga_index = 0;
 }
 
 //initialize vga buffer
@@ -48,24 +54,155 @@ void init_vga(uint8 fore_color, uint8 back_color)
 {
   vga_buffer = (uint16*)VGA_ADDRESS;  //point vga_buffer pointer to VGA_ADDRESS 
   clear_vga_buffer(&vga_buffer, fore_color, back_color);  //clear buffer
+  g_fore_color = fore_color;
+  g_back_color = back_color;
+}
+
+void print_char(char ch){
+  vga_buffer[vga_index] = vga_entry(ch, g_fore_color, g_back_color);
+  vga_index++;
+}
+
+void print_newline(){
+  /*if(next_line_index >= 55){
+    next_line_index = 0;
+    clear_vga_buffer(&vga_buffer, g_fore_color, g_back_color);
+  }
+  vga_index = 80*next_line_index;*/
+  vga_index += 80-lastLineLength;
+  next_line_index++;
+  lastLineLength = 0;
+}
+
+uint32 strlen(const char* str){
+  uint32 length = 0;
+  while(str[length])
+    length++;
+  return length;
+}
+
+uint32 digit_count(int num){
+  uint32 count = 0;
+  if (num == 0)
+    return 1;
+  while(num > 0){
+    count++;
+    num = num/10;
+  }
+  return count;
+}
+
+void itoa(int num, char *number)
+{
+  int dgcount = digit_count(num);
+  int index = dgcount - 1;
+  char x;
+  if(num == 0 && dgcount == 1){
+    number[0] = '0';
+    number[1] = '\0';
+  }else{
+    while(num != 0){
+      x = num % 10;
+      number[index] = x + '0';
+      index--;
+      num = num / 10;
+    }
+    number[dgcount] = '\0';
+  }
+}
+
+void printstr(char *str){
+  uint32 index = 0;
+  while(str[index]){
+    print_char(str[index]);
+    index++;
+  }
+  lastLineLength += strlen(str);
+}
+
+/*void print_int(int num){
+  char str_num[digit_count(num)+1];
+  itoa(num, str_num);
+  printstr(str_num);
+}
+*/
+uint8 inb(uint16 port)
+{
+  uint8 ret;
+  asm volatile("inb %1, %0" : "=a"(ret) : "d"(port));
+  return ret;
+}
+
+void outb(uint16 port, uint8 data)
+{
+  asm volatile("outb %0, %1" : "=a"(data) : "d"(port));
+}
+
+char get_input_keycode()
+{
+  char ch = 0;
+  while((ch = inb(KEYBOARD_PORT)) != 0){
+    if(ch > 0)
+      return ch;
+  }
+  return ch;
+}
+
+/*
+keep the cpu busy for doing nothing(nop)
+so that io port will not be processed by cpu
+here timer can also be used, but lets do this in looping counter
+*/
+void wait_for_io(uint32 timer_count)
+{
+  while(1){
+    asm volatile("nop");
+    timer_count--;
+    if(timer_count <= 0)
+      break;
+    }
+}
+
+void sleep(uint32 timer_count)
+{
+  wait_for_io(timer_count);
+}
+
+char* test_input()
+{
+  //to get the actual input, not working rn
+  //char* chararr[] = "";
+  char ch = 0;
+  char keycode = 0;
+  do{
+    keycode = get_input_keycode();
+    if(keycode == KEY_ENTER){
+      //print_newline();
+    }else{
+      ch = get_ascii_char(keycode);
+      print_char(ch);
+      lastLineLength += 1;
+    }
+    sleep(0x02FFFFFF);
+  }while(ch > 0 && keycode != KEY_ENTER);
+  return "Placeholder";
 }
 
 void kernel_entry()
 {
   //first init vga with fore & back colors
-  init_vga(WHITE, BLACK);
-  //assign each ASCII character to video buffer
-  //you can change colors here
-  vga_buffer[0] = vga_entry('H', WHITE, BLACK);
-  vga_buffer[1] = vga_entry('e', WHITE, BLACK);
-  vga_buffer[2] = vga_entry('l', WHITE, BLACK);
-  vga_buffer[3] = vga_entry('l', WHITE, BLACK);
-  vga_buffer[4] = vga_entry('o', WHITE, BLACK);
-  vga_buffer[5] = vga_entry(' ', WHITE, BLACK);
-  vga_buffer[6] = vga_entry('W', WHITE, BLACK);
-  vga_buffer[7] = vga_entry('o', WHITE, BLACK);
-  vga_buffer[8] = vga_entry('r', WHITE, BLACK);
-  vga_buffer[9] = vga_entry('l', WHITE, BLACK);
-  vga_buffer[10] = vga_entry('d', WHITE, BLACK);
-  vga_buffer[11] = vga_entry('!', WHITE, BLACK);
+  /*init_vga(WHITE, BLACK);
+  printstr("Hello, World!");
+  printstr(" New print");
+  print_newline();
+  printstr("How are you?");
+  print_newline();
+  printstr("Goodbye World!");
+  test_input();*/
+  init_vga(WHITE, BLUE);
+  printstr("Type here, one key per second, ENTER to go to next line");
+  print_newline();
+  test_input();
+  print_newline();
+  printstr("hi");
 }
