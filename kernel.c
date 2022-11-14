@@ -111,13 +111,16 @@ void itoa(int num, char *number)
   }
 }
 
-void printstr(char *str){
+void printstr(char *str, uint32 newline){
   uint32 index = 0;
   while(str[index]){
     print_char(str[index]);
     index++;
   }
   lastLineLength += strlen(str);
+  if (newline == 1){
+    print_newline();
+  }
 }
 
 /*void print_int(int num){
@@ -170,8 +173,7 @@ void sleep(uint32 timer_count)
 
 char* test_input()
 {
-  //to get the actual input, not working rn
-  //char* chararr[] = "";
+  //to return the actual input, not working rn
   char ch = 0;
   char keycode = 0;
   do{
@@ -183,14 +185,13 @@ char* test_input()
       print_char(ch);
       lastLineLength += 1;
     }
-    sleep(0x02FFFFFF);
+    sleep(0x05FFFFFF);
   }while(ch > 0 && keycode != KEY_ENTER);
   return "Placeholder";
 }
 
 void kernel_entry()
 {
-  //first init vga with fore & back colors
   /*init_vga(WHITE, BLACK);
   printstr("Hello, World!");
   printstr(" New print");
@@ -199,10 +200,13 @@ void kernel_entry()
   print_newline();
   printstr("Goodbye World!");
   test_input();*/
-  init_vga(WHITE, BLUE);
-  printstr("Type here, one key per second, ENTER to go to next line");
-  print_newline();
-  test_input();
-  print_newline();
-  printstr("hi");
+  init_vga(WHITE, GREEN);
+  printstr("yaOS booted.", 1);
+  //Puts the system into an endless loop.
+  while(0 == 0){
+    printstr("yaOS> ", 0);
+    test_input();
+    print_newline();
+    printstr("Very cool bro", 1);
+  }
 }
