@@ -3,6 +3,7 @@
 #include "utils.h"
 #include "char.h"
 
+
 //index for video buffer array
 uint32 vga_index;
 //counter to store new lines
@@ -171,11 +172,18 @@ void sleep(uint32 timer_count)
   wait_for_io(timer_count);
 }
 
-char* test_input()
+void test_input(char *buf)
 {
-  //to return the actual input, not working rn
+  /*to return the actual input.
+  As of right now, this returns the input + extra spaces, so it's kinda working but actually not.*/
+  uint32 j = 0;
+    for(j=0;j<strlen(buf);j++){
+        buf[j] = ' ';
+    }
+    
   char ch = 0;
   char keycode = 0;
+  uint32 i = 0;
   do{
     keycode = get_input_keycode();
     if(keycode == KEY_ENTER){
@@ -183,30 +191,29 @@ char* test_input()
     }else{
       ch = get_ascii_char(keycode);
       print_char(ch);
+      buf[i] = ch;
+      i++;
       lastLineLength += 1;
     }
     sleep(0x05FFFFFF);
   }while(ch > 0 && keycode != KEY_ENTER);
-  return "Placeholder";
 }
 
 void kernel_entry()
 {
-  /*init_vga(WHITE, BLACK);
-  printstr("Hello, World!");
-  printstr(" New print");
-  print_newline();
-  printstr("How are you?");
-  print_newline();
-  printstr("Goodbye World!");
-  test_input();*/
+  /*
+  TODO:
+  - Make input system better
+  - scrolling line
+  */
+  char arr[] = "empty";
   init_vga(WHITE, GREEN);
   printstr("yaOS booted.", 1);
   //Puts the system into an endless loop.
   while(0 == 0){
     printstr("yaOS> ", 0);
-    test_input();
+    test_input(arr);
     print_newline();
-    printstr("Very cool bro", 1);
+    printstr(arr, 1);
   }
 }
