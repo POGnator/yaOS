@@ -6,6 +6,7 @@
 #include "keyboard.h"
 #include "utils.h"
 #include "char.h"
+#include "commands.h"
 
 //index for video buffer array
 uint32 vga_index;
@@ -170,16 +171,19 @@ void sleep(uint32 timer_count)
 
 void input(char *buf)
 {
-  /*to return the actual input.
-  As of right now, this returns the input + extra spaces, so it's kinda working but actually not.*/
+  /*
+  to return the actual input.
+  As of right now, this returns the input + extra spaces, so it's kinda working but actually not.
+  */
   uint32 j = 0;
-    for(j=0;j<500;j++){
-        buf[j] = ' ';
-    }
-    
+  for(j=0;j<sizeof(buf);j++){
+    buf[j] = ' ';
+  }
+
   char ch = 0;
   char keycode = 0;
   uint32 i = 0;
+  //fill array with input chars
   do{
     keycode = get_input_keycode();
     if(keycode == KEY_ENTER){
@@ -192,7 +196,6 @@ void input(char *buf)
     }
     sleep(0x05FFFFFF);
   }while(ch > 0 && keycode != KEY_ENTER);
-  
 }
 //Returns 0 if not same, return 1 if same
 uint32 strcmp(char* str1, char* str2){

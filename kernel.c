@@ -10,7 +10,8 @@
 
 void kernel_entry()
 {
-  char arr[500];
+  //max size of input capped to 100
+  char arr[100];
   init_vga(WHITE, GREEN);
   printstr("yaOS booted.", 1);
   //Puts the system into an endless loop.
