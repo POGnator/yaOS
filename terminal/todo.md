@@ -3,3 +3,4 @@
 - [ ] "Scroll" the terminal
 - [x] Print integer
 - [x] Make own strcmp function
+- [ ] Fix double print newline
