@@ -65,6 +65,7 @@ void init_vga(uint8 fore_color, uint8 back_color)
 void print_char(char ch){
   vga_buffer[vga_index] = vga_entry(ch, g_fore_color, g_back_color);
   vga_index++;
+  lastLineLength++;
 }
 
 void print_newline(){
@@ -121,7 +122,6 @@ void printstr(char *str, uint32 newline){
     print_char(str[index]);
     index++;
   }
-  lastLineLength += strlen(str);
   if (newline == 1){
     print_newline();
   }
@@ -173,9 +173,8 @@ void input(char *buf)
   /*to return the actual input.
   As of right now, this returns the input + extra spaces, so it's kinda working but actually not.*/
   uint32 j = 0;
-    for(j=0;j<strlen(buf);j++){
+    for(j=0;j<500;j++){
         buf[j] = ' ';
-        
     }
     
   char ch = 0;
@@ -190,7 +189,6 @@ void input(char *buf)
       print_char(ch);
       buf[i] = ch;
       i++;
-      lastLineLength += 1;
     }
     sleep(0x05FFFFFF);
   }while(ch > 0 && keycode != KEY_ENTER);
@@ -217,7 +215,9 @@ void print_int(uint32 num, uint32 bool)
   char str_num[digit_count(num)+1];
   itoa(num, str_num);
   printstr(str_num, 1);
-  if(bool == 1){print_newline();}
+  if(bool == 1){
+    print_newline();
+    }
 }
 
 #endif
