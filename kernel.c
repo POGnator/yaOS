@@ -18,6 +18,12 @@ void kernel_entry()
     printstr("yaOS> ", 0);
     input(arr);
     print_newline();
+    printstr("Last line length: ",0);
+    print_int(lastLineLength,0);
+    print_newline();
+    printstr("string length input:",0);
+    print_int(strlen(arr),0);
+    print_newline();
     printstr(arr, 1);
   }
 }
