@@ -61,6 +61,7 @@ void init_vga(uint8 fore_color, uint8 back_color)
   clear_vga_buffer(&vga_buffer, fore_color, back_color);  //clear buffer
   g_fore_color = fore_color;
   g_back_color = back_color;
+  lastLineLength = 0;
 }
 
 void print_char(char ch){
@@ -117,7 +118,7 @@ void itoa(int num, char *number)
   }
 }
 
-void printstr(char *str, uint32 newline){
+uint32 printstr(char *str, uint32 newline){
   uint32 index = 0;
   while(str[index]){
     print_char(str[index]);
@@ -126,6 +127,7 @@ void printstr(char *str, uint32 newline){
   if (newline == 1){
     print_newline();
   }
+  return index;
 }
 uint8 inb(uint16 port)
 {
@@ -169,14 +171,14 @@ void sleep(uint32 timer_count)
   wait_for_io(timer_count);
 }
 
-void input(char *buf)
+uint32 input(char *buf)
 {
   /*
   to return the actual input.
   As of right now, this returns the input + extra spaces, so it's kinda working but actually not.
   */
   uint32 j = 0;
-  for(j=0;j<sizeof(buf);j++){
+  for(j=0;j<strlen(buf);j++){
     buf[j] = ' ';
   }
 
@@ -196,6 +198,7 @@ void input(char *buf)
     }
     sleep(0x05FFFFFF);
   }while(ch > 0 && keycode != KEY_ENTER);
+  return i;
 }
 //Returns 0 if not same, return 1 if same
 uint32 strcmp(char* str1, char* str2){
