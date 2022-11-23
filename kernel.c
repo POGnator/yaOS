@@ -6,9 +6,6 @@
 #include "terminal/std-io.h"
 #include "programs/election.h"
 
-
-
-
 void kernel_entry()
 {
   //max size of input capped to 100
@@ -22,11 +19,11 @@ void kernel_entry()
     if(strcmp(arr, "PROGRAM")==1){
       cool_program();
     }
-    if(strcmp(arr, "CLEAR")==1){
-      init_vga(WHITE,GREEN);
-    }
     print_newline();
     printstr(arr,1);
     print_int(strlen(arr),1);
+    if(strcmp(arr, "CLEAR")==1){
+      init_vga(WHITE,GREEN);
+    }
   }
 }
