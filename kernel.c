@@ -16,10 +16,11 @@ void kernel_entry()
   while(strcmp(arr, "CLOSE") == 0){
     printstr("yaOS> ", 0);
     input(arr);
+    print_newline();
     if(strcmp(arr, "PROGRAM")==1){
       //cool_program();
+      printstr("Will print ToDo list once finished.",1);
     }
-    print_newline();
     printstr(arr,1);
     print_int(vga_index,0);
     if(vga_index>=1920){
