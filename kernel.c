@@ -2,9 +2,9 @@
 #include "keyboard.h"
 #include "utils.h"
 #include "char.h"*/
-#include "terminal/commands.h"
+//#include "terminal/commands.h"
 #include "terminal/std-io.h"
-#include "programs/election.h"
+//#include "programs/election.h"
 
 
 
@@ -20,13 +20,16 @@ void kernel_entry()
     printstr("yaOS> ", 0);
     input(arr);
     if(strcmp(arr, "PROGRAM")==1){
-      cool_program();
+      //cool_program();
     }
     if(strcmp(arr, "CLEAR")==1){
       init_vga(WHITE,GREEN);
     }
     print_newline();
     printstr(arr,1);
-    print_int(strlen(arr),1);
+    print_int(vga_index,0);
+    if(vga_index>=1920){
+      init_vga(WHITE,GREEN);
+    }
   }
 }

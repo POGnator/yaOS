@@ -2,6 +2,7 @@
     "files.associations": {
         "keyboard.h": "c",
         "io.h": "c",
-        "commands.h": "c"
+        "commands.h": "c",
+        "election.h": "c"
     }
 }

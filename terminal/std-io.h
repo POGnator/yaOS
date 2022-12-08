@@ -62,6 +62,7 @@ void init_vga(uint8 fore_color, uint8 back_color)
   g_fore_color = fore_color;
   g_back_color = back_color;
   lastLineLength = 0;
+  
 }
 
 void print_char(char ch){
