@@ -1,10 +1,4 @@
-/*#include "kernel.h"
-#include "keyboard.h"
-#include "utils.h"
-#include "char.h"*/
-//#include "terminal/commands.h"
 #include "terminal/std-io.h"
-//#include "programs/election.h"
 
 void kernel_entry()
 {
@@ -17,8 +11,8 @@ void kernel_entry()
     printstr("yaOS> ", 0);
     input(arr);
     print_newline();
+    //First try of a command handler, subject to change.
     if(strcmp(arr, "PROGRAM")==1){
-      //cool_program();
       printstr("Will print ToDo list once finished.",1);
     }
     printstr(arr,1);
