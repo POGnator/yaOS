@@ -10,3 +10,4 @@
 - [x] Fix double print newline
         - (The fix was to exclude terminal/commands.h and programs/election.h)
 - [ ] Implement Filesystem
+- [ ] Port a compiler
