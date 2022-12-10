@@ -10,5 +10,6 @@ You'll need a Linux distro and emulator of some kind
 - Windows 10/11
 - Arch WSL
 - qemu for Windows
+- VSCode
 ---
 I also followed [this](https://www.codeproject.com/Articles/1225196/Create-Your-Own-Kernel-In-C-2) tutorial for the most basic stuff
