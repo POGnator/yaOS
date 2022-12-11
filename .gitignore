@@ -2,4 +2,5 @@
 yaOS.iso
 yaOS.bin
 kernel.o
+boot.o
 isodir/*
