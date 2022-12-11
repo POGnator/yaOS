@@ -1,10 +1,14 @@
-**System todo:**
-- [ ] Overhaul input function:
-        - [ ] Avoid sleep
-        - [ ] Make use of upper and lower case letters
-        - [ ] Return a value instead of modifying an existing one
-- [ ] "Scroll" the terminal
-- [ ] Write Documentation
+# System todo:
+### Overhaul input function:
+- [ ] Avoid sleep
+- [ ] Make use of upper and lower case letters
+- [ ] Return a value instead of modifying an existing one
+---
+### "Scroll" the terminal:
+- [ ] ...
+---
+### Write Documentation:
+---
 - [ ] Write a command handler
 - [x] Print integer
 - [x] Make own strcmp function
