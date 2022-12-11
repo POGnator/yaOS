@@ -189,14 +189,10 @@ uint32 input(char *buf)
   //fill array with input chars
   do{
     keycode = get_input_keycode();
-    if(keycode == KEY_ENTER){
-      //print_newline();
-    }else{
-      ch = get_ascii_char(keycode);
-      print_char(ch);
-      buf[i] = ch;
-      i++;
-    }
+    ch = get_ascii_char(keycode);
+    print_char(ch);
+    buf[i] = ch;
+    i++;
     sleep(0x05FFFFFF);
   }while(ch > 0 && keycode != KEY_ENTER);
   return i;
