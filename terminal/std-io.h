@@ -65,12 +65,6 @@ void init_vga(uint8 fore_color, uint8 back_color)
   
 }
 
-void print_char(char ch){
-  vga_buffer[vga_index] = vga_entry(ch, g_fore_color, g_back_color);
-  vga_index++;
-  lastLineLength++;
-}
-
 void print_newline(){
   /*if(next_line_index >= 55){
     next_line_index = 0;
@@ -80,6 +74,17 @@ void print_newline(){
   vga_index += 80-lastLineLength;
   next_line_index++;
   lastLineLength = 0;
+}
+
+void print_char(char ch){
+  if(ch != '\n'){
+    vga_buffer[vga_index] = vga_entry(ch, g_fore_color, g_back_color);
+    vga_index++;
+    lastLineLength++;
+  }else{
+    print_newline();
+  }
+
 }
 
 uint32 strlen(const char* str){
@@ -119,15 +124,15 @@ void itoa(int num, char *number)
   }
 }
 
-uint32 printstr(char *str, uint32 newline){
+uint32 printstr(char *str/*, uint32 newline*/){
   uint32 index = 0;
   while(str[index]){
     print_char(str[index]);
     index++;
   }
-  if (newline == 1){
-    print_newline();
-  }
+  //if (newline == 1){
+  //  print_newline();
+  //}
   return index;
 }
 uint8 inb(uint16 port)
@@ -213,14 +218,11 @@ uint32 strcmp(char* str1, char* str2){
   }
   return 1;
 }
-void print_int(uint32 num, uint32 bool)
+void print_int(uint32 num)
 {
   char str_num[digit_count(num)+1];
   itoa(num, str_num);
-  printstr(str_num, 1);
-  if(bool == 1){
-    print_newline();
-    }
+  printstr(str_num);
 }
 
 #endif
