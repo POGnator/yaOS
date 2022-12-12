@@ -17,6 +17,7 @@ uint8 g_fore_color = WHITE, g_back_color = BLUE;
 //digit ascii code for printing integers
 int digit_ascii_codes[10] = {0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
 uint32 lastLineLength = 0;
+char* textLog;
 
 /*
 16 bit video buffer elements(register ax)
@@ -48,6 +49,7 @@ void clear_vga_buffer(uint16 **buffer, uint8 fore_color, uint8 back_color)
 {
   uint32 i;
   for(i = 0; i < BUFSIZE; i++){
+    //vga_buffer gets 0 at place i
     (*buffer)[i] = vga_entry(NULL, fore_color, back_color);
   }
   next_line_index = 0;
@@ -62,7 +64,13 @@ void init_vga(uint8 fore_color, uint8 back_color)
   g_fore_color = fore_color;
   g_back_color = back_color;
   lastLineLength = 0;
-  
+}
+
+uint32 strlen(const char* str){
+  uint32 length = 0;
+  while(str[length])
+    length++;
+  return length;
 }
 
 void print_newline(){
@@ -72,6 +80,7 @@ void print_newline(){
   }
   vga_index = 80*next_line_index;*/
   vga_index += 80-lastLineLength;
+  textLog[strlen(textLog)+1] = ' ';
   next_line_index++;
   lastLineLength = 0;
 }
@@ -84,14 +93,7 @@ void print_char(char ch){
   }else{
     print_newline();
   }
-
-}
-
-uint32 strlen(const char* str){
-  uint32 length = 0;
-  while(str[length])
-    length++;
-  return length;
+  textLog[strlen(textLog)+1] = ch;
 }
 
 uint32 digit_count(int num){

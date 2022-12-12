@@ -3,6 +3,7 @@
         "keyboard.h": "c",
         "io.h": "c",
         "commands.h": "c",
-        "election.h": "c"
+        "election.h": "c",
+        "std-io.h": "c"
     }
 }
