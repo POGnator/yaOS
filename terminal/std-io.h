@@ -17,7 +17,8 @@ uint8 g_fore_color = WHITE, g_back_color = BLUE;
 //digit ascii code for printing integers
 int digit_ascii_codes[10] = {0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
 uint32 lastLineLength = 0;
-char* textLog;
+char textLog[500];
+int isScrolling = 0;
 
 /*
 16 bit video buffer elements(register ax)
@@ -80,7 +81,6 @@ void print_newline(){
   }
   vga_index = 80*next_line_index;*/
   vga_index += 80-lastLineLength;
-  textLog[strlen(textLog)+1] = ' ';
   next_line_index++;
   lastLineLength = 0;
 }
@@ -93,7 +93,9 @@ void print_char(char ch){
   }else{
     print_newline();
   }
-  textLog[strlen(textLog)+1] = ch;
+  if(isScrolling == 0/* && vga_index > 80*/){
+    textLog[strlen(textLog)] = ch;
+  }
 }
 
 uint32 digit_count(int num){

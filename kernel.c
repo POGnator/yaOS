@@ -10,21 +10,27 @@ void kernel_entry()
   while(strcmp(arr, "CLOSE") == 0){
     printstr("yaOS> ");
     input(arr);
-    print_char('\n');
+    //print_char('\n');
     //First try of a command handler, subject to change.
     if(strcmp(arr, "PROGRAM")==1){
       printstr("Will print ToDo list once finished.\n");
     }
-    printstr(arr);
-    print_newline();
+    //printstr(arr);
+    //printstr(textLog);
+    print_char('\n');
     print_int(vga_index);
     print_char('\n');
-    if(vga_index>=1820){
-      uint16 iterator = 0;
-      for(iterator = 0; iterator < strlen(textLog-80); iterator++){
-        //vga_buffer[iterator] = vga_entry(NULL, WHITE, GREEN);
-        init_vga(WHITE, GREEN);
-        print_char(textLog[iterator+80]);
+    if(vga_index>=1920){
+      init_vga(WHITE,GREEN);
+      isScrolling = 1;
+      for(uint32 i =80; i<strlen(textLog);i++){
+        print_char(textLog[i]);
+      }
+      //printstr(textLog);
+      vga_index = 1920;
+      isScrolling = 0;
+      for(uint32 i = 0; i<strlen(textLog);i++){
+        textLog[i] = NULL;
       }
     }
   }
