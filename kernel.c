@@ -23,15 +23,17 @@ void kernel_entry()
     if(vga_index>=1920){
       init_vga(WHITE,GREEN);
       isScrolling = 1;
-      for(uint32 i =80; i<strlen(textLog);i++){
-        print_char(textLog[i]);
+      for (int j = 0; j < 80; j++) {
+        for (int i = 0; i < 23; i++) {
+          print_char(textLog[j][i]);
+        }
       }
       //printstr(textLog);
       vga_index = 1920;
       isScrolling = 0;
-      for(uint32 i = 0; i<strlen(textLog);i++){
+      /*for(uint32 i = 0; i<strlen(textLog);i++){
         textLog[i] = NULL;
-      }
+      }*/
     }
   }
 }
