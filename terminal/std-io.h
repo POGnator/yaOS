@@ -94,14 +94,6 @@ void print_char(char ch){
   }else{
     print_newline();
   }
-  if(isScrolling == 0 && ch != '\n'){
-    textLog[vga_index-1] = ch;
-  }
-  else{
-    for (uint32 i = 0; i < 80-lastLineLength; i++){
-      textLog[i] = ' ';
-    }
-  }
 }
 
 uint32 digit_count(int num){
@@ -140,9 +132,6 @@ uint32 printstr(char *str/*, uint32 newline*/){
     print_char(str[index]);
     index++;
   }
-  //if (newline == 1){
-  //  print_newline();
-  //}
   return index;
 }
 uint8 inb(uint16 port)
