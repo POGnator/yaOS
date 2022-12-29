@@ -17,5 +17,12 @@ void kernel_entry(){
         print_char('\n');
         print_int(strlen(arr));
         print_char('\n');
+        if (next_line_index < 12){
+            for(int i = 0; i<80; i++){
+                for(int j = 0; j<26; j++){
+                    print_char(textLog[i][j]);
+                }
+            }
+        }
     }
 }

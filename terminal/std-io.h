@@ -17,7 +17,7 @@ uint8 g_fore_color = WHITE, g_back_color = BLUE;
 //digit ascii code for printing integers
 int digit_ascii_codes[10] = {0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
 uint32 lastLineLength = 0;
-char textLog[1920];
+char textLog[80][26];
 int isScrolling = 0;
 int line = 0;
 
@@ -87,6 +87,7 @@ void print_newline(){
 }
 
 void print_char(char ch){
+  textLog[lastLineLength][next_line_index] = ch;
   if(ch != '\n'){
     vga_buffer[vga_index] = vga_entry(ch, g_fore_color, g_back_color);
     vga_index++;

@@ -27,7 +27,6 @@ void kernel_entry()
     if(vga_index>=1920){
       init_vga(WHITE,GREEN);
       isScrolling = 1;
-      printstr(textLog);
       vga_index = 1840;
       isScrolling = 0;
     }
