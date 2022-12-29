@@ -3,3 +3,5 @@ yaOS.iso
 yaOS.bin
 isodir/*
 *.o
+boot.o
+build.sh.bak
